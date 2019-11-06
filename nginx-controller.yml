@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata: 
   name: nginx-ingress-controller
-  namespace: default
+  namespace: nginx
 spec: 
   replicas: 1
   revisionHistoryLimit: 3
@@ -20,6 +20,7 @@ spec:
             - "--default-ssl-certificate=$(POD_NAMESPACE)/tls-certificate"
             - "--configmap=$(POD_NAMESPACE)/ingress-lb-config"
             - "--v=3"
+            - "--watch-namespace=$(POD_NAMESPACE)"
           env: 
             - name: POD_NAME
               valueFrom: 

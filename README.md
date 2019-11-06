@@ -2,6 +2,7 @@
 
 This Example demonstrates a simple nginx reverse-proxy configuration that can be used in a local Kubernetes deployment (e.g Docker for Windows)
 instructions have been adapted from hackernoon.com/setting-up-nginx-ingress-on-kubernetes-2b733d8d2f45
+This nginx is setup with the --watch-namespace flag so that it only monitors the namespace it's deployed into (the 'nginx' namespace).
 
 ## Installation
 
@@ -11,15 +12,19 @@ instructions have been adapted from hackernoon.com/setting-up-nginx-ingress-on-k
 
     `openssl dhparam -out dhparam.pem 2048`
 
-2. create the tls-certificate secret referenced in the ingress.yml for the backend service
+2. create the namespace
    
-    `kubectl create secret tls tls-certificate --key tls-key.key --cert tls-cert.crt --namespace default`
+   `kubectl apply -f namespace.yml`
 
-    `kubectl create secret generic tls-dhparam --from-file=dhparam.pem --namespace default`
+3. create the tls-certificate secret referenced in the ingress.yml for the backend service
+   
+    `kubectl create secret tls tls-certificate --key nginx-selfsigned.key --cert nginx-selfsigned.crt --namespace nginx`
 
-3. apply the rest of the yml
+    `kubectl create secret generic tls-dhparam --from-file=dhparam.pem --namespace nginx`
 
-    `kubectl create -f .`
+4. apply the rest of the yml
+
+    `kubectl apply -f .`
 
 
 ## Useful Notes
@@ -28,37 +33,37 @@ instructions have been adapted from hackernoon.com/setting-up-nginx-ingress-on-k
  
 Nginx will only forward requests for the host defined in the ingress to the backend service so trying to hit the nginx service via localhost or anything else will result in an unmatched requests (and should return the default backend 404 response)
 
-You need to add the following to \windows\system32\drivers\etc\hosts in order to be able to hit `http://<myhost>/` and have it succesfully
+You need to add the following to \windows\system32\drivers\etc\hosts in order to be able to hit `https://nginx.triad.co.uk/web1` and have it succesfully
 recognised at the nginx server.
 
-`127.0.0.1 <myhost>`
+`127.0.0.1 nginx.triad.co.uk`
  
-When testing this from within the cluster on a linux box, you need to add the IP address of the nginx service mapped to `<myhost>` in /etc/hosts
+When testing this from within the cluster on a linux box, you need to add the IP address of the nginx service mapped to `nginx.triad.co.uk` in /etc/hosts
 
-`<nginx-ingress service ip>  <myhost>`
+`<nginx-ingress service ip>  nginx.triad.co.uk`
 
 you can find the IP of the nginx-ingress service from the dashboard or via nslookup nginx-ingress
 
 When testing, you can 'impersonate' the requerst url by inline resolving the host you want to use, with a --resolve option
 
-`curl --insecure -L -v 'https://<myhost>:443/web1/' --resolve '<myhost>:443:<nginx-ingress service ip>'`
+`curl --insecure -L -v 'https://nginx.triad.co.uk:443/web1/' --resolve 'nginx.triad.co.uk:443:<nginx-ingress service ip>'`
 
 You don't need to do this once you've added the mapping to the hosts file..the following will work 
 
-`curl  --insecure -L -v 'https://<myhost>:443/web1/'`
+`curl  --insecure -L -v 'https://nginx.triad.co.uk:443/web1/'`
 
-`curl --insecure -L -v 'https://<myhost>/web1/'`
+`curl --insecure -L -v 'https://nginx.triad.co.uk/web1/'`
  
 ### NOTE ON PATH ELEMENTS IN INGRESSES
 
-The PATH element within the ingress is quite explicit e.g you may find `https://<myhost>:443/web1` doesn't work without the trailing slash.
+The PATH element within the ingress is quite explicit e.g you may find `https://nginx.triad.co.uk:443/web1` doesn't work without the trailing slash.
 
 In the example I've used the path `/web1(/|$)` to denote `/web1` followed buy another `/`, or an end of line (no trailing `/`)
 
 ### NOTE ON INGRESS ANNOTATIONS
 
 
-When we hit `http://<myhost>/web1/` at the nginx server, nginx just forwards the entire request to the backend service
+When we hit `http://nginx.triad.co.uk/web1/` at the nginx server, nginx just forwards the entire request to the backend service
 including the `/web1/` which may or may not be what you need.
 To work around this we use an annotation in the backend services ingress to rewrite the URL and strip out the elements of the
 path specification to create the desired 'new' path for the target backendservice.
@@ -93,5 +98,5 @@ so it will try an http connection to 443 and you'll get the fairly obvious error
 
 Nothing to worry about, but might be a source of confusion...just prefix with https if you want to test that route...you just can't click directly on it from the dashboard that's all.
 
-Also....it should be obvious...but `localhost` won't hit your service anyway since the service is  mapped to `<myhost>/web1` not `localhost/web1` so 
+Also....it should be obvious...but `localhost` won't hit your service anyway since the service is  mapped to `nginx.triad.co.uk/web1` not `localhost/web1` so 
 you'll just get the default backend unless you give it the proper host. Essentially, the service links in the dashboard are of little use to you.
