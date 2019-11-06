@@ -1,7 +1,9 @@
 # Nginx/Kubernetes Reverse proxy configuration 
 
 This Example demonstrates a simple nginx reverse-proxy configuration that can be used in a local Kubernetes deployment (e.g Docker for Windows)
-instructions have been adapted from hackernoon.com/setting-up-nginx-ingress-on-kubernetes-2b733d8d2f45
+
+The instructions were adapted from hackernoon.com/setting-up-nginx-ingress-on-kubernetes-2b733d8d2f45
+
 This nginx is setup with the --watch-namespace flag so that it only monitors the namespace it's deployed into (the 'nginx' namespace).
 
 ## Installation
