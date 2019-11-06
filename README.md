@@ -12,8 +12,10 @@ instructions have been adapted from hackernoon.com/setting-up-nginx-ingress-on-k
     `openssl dhparam -out dhparam.pem 2048`
 
 2. create the tls-certificate secret referenced in the ingress.yml for the backend service
-kubectl create secret tls tls-certificate --key tls-key.key --cert tls-cert.crt --namespace default
-kubectl create secret generic tls-dhparam --from-file=dhparam.pem --namespace default
+   
+    `kubectl create secret tls tls-certificate --key tls-key.key --cert tls-cert.crt --namespace default`
+
+    `kubectl create secret generic tls-dhparam --from-file=dhparam.pem --namespace default`
 
 3. apply the rest of the yml
 
