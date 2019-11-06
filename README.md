@@ -1,6 +1,7 @@
 # Nginx/Kubernetes Reverse proxy configuration 
 
-This Example demonstrates a simple nginx reverse-proxy configuration that can be used in a local Kubernetes deployment (e.g Docker for Windows)
+This Example demonstrates a simple nginx reverse-proxy configuration that can be used in a local Kubernetes deployment (e.g Docker for Windows).
+The https://github.com/kubernetes/ingress-nginx image is used from https://quay.io/repository/kubernetes-ingress-controller/nginx-ingress-controller?tab=info
 
 The instructions were adapted from hackernoon.com/setting-up-nginx-ingress-on-kubernetes-2b733d8d2f45
 
@@ -102,3 +103,8 @@ Nothing to worry about, but might be a source of confusion...just prefix with ht
 
 Also....it should be obvious...but `localhost` won't hit your service anyway since the service is  mapped to `nginx.triad.co.uk/web1` not `localhost/web1` so 
 you'll just get the default backend unless you give it the proper host. Essentially, the service links in the dashboard are of little use to you.
+
+### STICKY SESSIONS
+
+If you need session affinity (e.g if your webservices create antiforgery tokens locally to the service), uncomment the relevant line in the ingress.yml
+Note that the method described in https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md#session-affinity didn't appear to work for me whereas using remote_addr(clients IP)  to hash-by did.

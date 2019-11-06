@@ -13,11 +13,17 @@ metadata:
     nginx.org/ssl-services: "hello-world-svc"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
-    nginx.ingress.kubernetes.io/session-cookie-name: "GOS_INGRESS_COOKIE"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+    # Note that if your ingress is load balancing across
+    # multiple webserver backend services, your client may hit
+    # issues with antiforgery tokens unless those backend
+    # services store AF tokens centrally. To avoid this issue, 
+    # you can use 'upstream-hash-by' based on the clients IP 
+    # so that nginx routes all requests from the same client IP
+    # to the same POD ensuring your client hits the same backend 
+    # webservice that created the initial token
+
+    # UNCOMMENT TO ENABLE STICKY SESSIONS BASED ON CLIENT IP
+    # nginx.ingress.kubernetes.io/upstream-hash-by: $remote_addr
 spec:
   tls:
     - hosts:
