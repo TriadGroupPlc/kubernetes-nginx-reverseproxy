@@ -1,0 +1,33 @@
+# Ingress resource defining the
+# nginx rules and behaviours
+# The nginx controller watches for new ingress resources 
+# being created and reconfigures itself based on the configuration
+# in the ingress resource
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: hello-world-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.org/ssl-services: "hello-world-svc"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
+    nginx.ingress.kubernetes.io/session-cookie-name: "GOS_INGRESS_COOKIE"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+spec:
+  tls:
+    - hosts:
+      - triad.ant.org
+      secretName: tls-certificate
+  rules:
+  - host: nginx.triad.co.uk
+    http:
+      paths:
+      - path: /web1(/|$)(.*)      
+        backend:
+          serviceName: hello-world-svc
+          servicePort: 80

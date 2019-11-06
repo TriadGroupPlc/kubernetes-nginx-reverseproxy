@@ -1,0 +1,9 @@
+# (empty) ConfigMap utilised by the nginx controller
+# No additional configuration set at present
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ingress-lb-config
+  labels:
+    k8s-addon: ingress-nginx.addons.k8s.io
+data:

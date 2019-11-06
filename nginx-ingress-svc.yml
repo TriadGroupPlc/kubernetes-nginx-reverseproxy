@@ -1,0 +1,20 @@
+# Service to expose nginx
+# all traffic goes via this service to the
+# nginx controller which redirects to the appropriate
+# backend service based on the rules defined in the nginx ingress
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ingress
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 85
+    targetPort: http
+  - name: https
+    port: 443
+    targetPort: https
+  selector:
+    k8s-app: nginx-ingress-lb
