@@ -2,7 +2,7 @@
 # nginx rules and behaviours
 # The nginx controller watches for new ingress resources 
 # being created and reconfigures itself based on the configuration
-# in the ingress resource
+# in the ingress resource  
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
