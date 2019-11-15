@@ -1,0 +1,31 @@
+# nginx controller requires a set of 
+# roles in order to 'watch' for changes to
+# ingress resources
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx
+  namespace: nginx
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: nginx-cluster-role
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs:
+    - get
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: nginx-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-cluster-role
+subjects:
+- kind: ServiceAccount
+  name: nginx
+  namespace: nginx
