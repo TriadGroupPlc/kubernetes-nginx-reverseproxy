@@ -8,10 +8,9 @@ metadata:
   labels:
     k8s-addon: ingress-nginx.addons.k8s.io
 data:
-  use-geoip2: "true"
-                
+  use-geoip2: "true"                
   http-snippet: | #https://dev.maxmind.com/geoip/legacy/codes/iso3166/
-                map $geoip2_city_country_code $country_code_blacklist {
+                map $geoip2_city_country_code $country_code_allow {
                     default yes;
                     #GB no; # UK for Testing
                     A1 no; # Anonymous Proxy
@@ -28,11 +27,10 @@ data:
                     TR no; #Turkey
                     TW no; #Taiwan
                 }
-  server-snippet: if ($country_code_blacklist = no) { return 403; }
+  server-snippet: if ($country_code_allow = no) { return 403; }
 
   location-snippet:  |
                      add_header X-GeoCountry $geoip2_city_country_name;
                      add_header X-GeoCountryCode $geoip2_city_country_code;
-                     add_header X-GeoCity $geoip2_city;
-                     add_header X-GeoLat $geoip2_latitude;
+                     add_header X-GeoCity $geoip2_city;                     
                      add_header X-GeoRegion $geoip2_region_name;
