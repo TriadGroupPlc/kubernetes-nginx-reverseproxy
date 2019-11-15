@@ -1,12 +1,6 @@
 # nginx controller requires a set of 
 # roles in order to 'watch' for changes to
 # ingress resources
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: nginx
-  namespace: nginx
----
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
