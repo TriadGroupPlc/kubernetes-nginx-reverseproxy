@@ -13,7 +13,7 @@ metadata:
   name: nginx-cluster-role
 rules:
 - apiGroups: [""]
-  resources: ["nodes"]
+  resources: ["nodes","namespaces"]
   verbs:
     - get
 ---

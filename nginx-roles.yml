@@ -14,7 +14,7 @@ metadata:
   namespace: nginx
 rules:
 - apiGroups: [""]
-  resources: ["secrets", "configmaps", "services", "endpoints","namespaces","pods"]
+  resources: ["secrets", "configmaps", "services", "endpoints","pods"]
   verbs:
     - get
     - watch
