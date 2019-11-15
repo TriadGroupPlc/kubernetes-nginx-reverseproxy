@@ -8,24 +8,27 @@ metadata:
   labels:
     k8s-addon: ingress-nginx.addons.k8s.io
 data:
-  use-geoip2: "true"                
-  http-snippet: | #https://dev.maxmind.com/geoip/legacy/codes/iso3166/
+  use-geoip2: "true"             
+  
+  # Uncomment and amend below to geo-fence 
+  # ISO Country codes from https://dev.maxmind.com/geoip/legacy/codes/iso3166/
+  http-snippet: | 
                 map $geoip2_city_country_code $country_code_allow {
                     default yes;
                     #GB no; # UK for Testing
-                    A1 no; # Anonymous Proxy
-                    A2 no; # Satellite Provider
-                    BR no; #Brazil
-                    O1 no; #Other Country
-                    AF no; #Afghanistan
-                    CD no; #Dem Rep Congo
-                    CF no; #Central African Rep
-                    CG no; #Congo
-                    CN no; #China
-                    RO no; #Romania
-                    RU no; #Russia
-                    TR no; #Turkey
-                    TW no; #Taiwan
+                    #A1 no; # Anonymous Proxy
+                    #A2 no; # Satellite Provider
+                    #BR no; #Brazil
+                    #O1 no; #Other Country
+                    #AF no; #Afghanistan
+                    #CD no; #Dem Rep Congo
+                    #CF no; #Central African Rep
+                    #CG no; #Congo
+                    #CN no; #China
+                    #RO no; #Romania
+                    #RU no; #Russia
+                    #TR no; #Turkey
+                    #TW no; #Taiwan
                 }
   server-snippet: if ($country_code_allow = no) { return 403; }
 

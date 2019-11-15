@@ -23,7 +23,7 @@ metadata:
     # webservice that created the initial token
 
     # UNCOMMENT TO ENABLE STICKY SESSIONS BASED ON CLIENT IP
-    nginx.ingress.kubernetes.io/upstream-hash-by: $remote_addr
+    # nginx.ingress.kubernetes.io/upstream-hash-by: $remote_addr
 spec:
   tls:
     - hosts:

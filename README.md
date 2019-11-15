@@ -7,6 +7,10 @@ The instructions were adapted from hackernoon.com/setting-up-nginx-ingress-on-ku
 
 This nginx is setup with the --watch-namespace flag so that it only monitors the namespace it's deployed into (the 'nginx' namespace).
 
+* Session Affinity - uncomment the nginx.ingress.kubernetes.io/upstream-hash-by: $remote_addr  line in ingress.yml
+* Geo-Fencing by Country Code - uncomment/amend the relevant countries in nginx-config.yml
+
+
 ## Installation
 
 1. generate a self signed cert and key for TLS - FQDN must match the host specified in the backend services ingress (ingress.yml)
