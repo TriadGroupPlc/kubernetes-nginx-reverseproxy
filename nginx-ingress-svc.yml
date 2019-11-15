@@ -18,3 +18,4 @@ spec:
     targetPort: https
   selector:
     k8s-app: nginx-ingress-lb
+  externalTrafficPolicy: "Local"	#preserve Client IP required for session affinity to work
