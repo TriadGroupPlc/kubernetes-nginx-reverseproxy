@@ -1,3 +1,5 @@
+NOTE: Since this was last updated, the GeoIP service that nginx uses to restrict by GeoLocation is now a subscription service so you may find this part of the configuration no longer works. 
+
 # Nginx/Kubernetes Reverse proxy configuration 
 
 This Example demonstrates a simple nginx reverse-proxy configuration that can be used in a local Kubernetes deployment (e.g Docker for Windows).
